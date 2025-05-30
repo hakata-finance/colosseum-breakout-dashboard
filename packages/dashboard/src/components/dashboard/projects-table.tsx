@@ -355,16 +355,9 @@ export function ProjectsTable({
               <TableRow className="h-6">
                 <TableHead className="w-[50px] text-xs py-1">#</TableHead>
                 <TableHead className="w-[180px] text-xs py-1">
-                  <button
-                    className="w-full text-left font-semibold hover:text-hakata-purple dark:hover:text-hakata-light-purple transition-colors flex items-center group"
-                    onClick={() => handleSort('name')}
-                    disabled={isEmpty}
-                  >
+                  <div className="w-full text-left font-semibold">
                     Project
-                    <span className="group-hover:opacity-100">
-                      {getSortIcon('name')}
-                    </span>
-                  </button>
+                  </div>
                 </TableHead>
                 <TableHead className="w-[350px] text-xs py-1">Description</TableHead>
                 <TableHead className="w-[120px] text-center text-xs py-1">Tracks</TableHead>
