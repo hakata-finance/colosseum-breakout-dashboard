@@ -58,8 +58,8 @@ export function useSearch(projects: Project[]) {
   // Separate debounced search value
   const [debouncedFilters, setDebouncedFilters] = useState<FilterOptions>(filters);
   const [isSearching, setIsSearching] = useState(false);
-  const debounceRef = useRef<NodeJS.Timeout>();
-  const urlSyncRef = useRef<NodeJS.Timeout>();
+  const debounceRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const urlSyncRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const cacheRef = useRef<Map<string, Project[]>>(new Map());
 
   // Pre-compute search index (only when projects change)
@@ -201,7 +201,9 @@ export function useSearch(projects: Project[]) {
     // Cache results (limit cache size)
     if (cacheRef.current.size >= 20) {
       const firstKey = cacheRef.current.keys().next().value;
-      cacheRef.current.delete(firstKey);
+      if (firstKey !== undefined) {
+        cacheRef.current.delete(firstKey);
+      }
     }
     cacheRef.current.set(cacheKey, results);
 

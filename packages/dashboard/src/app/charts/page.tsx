@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { Suspense, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useProjects } from '@/hooks/use-projects';
 import { useSearch } from '@/hooks/useSearch';
@@ -16,8 +16,10 @@ import {
   AlertCircle,
   BarChart3,
 } from 'lucide-react';
+import { SkeletonCharts } from '@/components/ui/skeleton-components';
 
-export default function ChartsPage() {
+// Separate component that uses useSearchParams
+function ChartsContent() {
   const { projects, loading, lastFetch, error, fetchData, clearError } = useProjects();
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
 
@@ -151,9 +153,6 @@ export default function ChartsPage() {
               </div>
             </div>
 
-            {/* Collapsible Filter Panel */}
-            {/* Filter sidebar is now rendered at the bottom */}
-
             {/* Results Summary - Always reserve space */}
             <div className="h-5">
               {(filters.search || hasActiveFilters) && (
@@ -179,5 +178,35 @@ export default function ChartsPage() {
         />
       </div>
     </div>
+  );
+}
+
+// Loading fallback component
+function ChartsLoading() {
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto p-6 space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex items-center gap-4">
+            <div className="h-10 w-32 bg-muted rounded animate-pulse" />
+            <div className="space-y-2">
+              <div className="h-8 w-64 bg-muted rounded animate-pulse" />
+              <div className="h-4 w-48 bg-muted rounded animate-pulse" />
+            </div>
+          </div>
+          <div className="h-10 w-32 bg-muted rounded animate-pulse" />
+        </div>
+        <div className="h-64 w-full bg-muted rounded animate-pulse" />
+        <SkeletonCharts />
+      </div>
+    </div>
+  );
+}
+
+export default function ChartsPage() {
+  return (
+    <Suspense fallback={<ChartsLoading />}>
+      <ChartsContent />
+    </Suspense>
   );
 }

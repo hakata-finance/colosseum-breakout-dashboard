@@ -8,13 +8,16 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspace=dashboard",
-    "build": "npm install --workspace=dashboard && npm run build --workspace=dashboard",
+    "build": "npm run build --workspace=dashboard",
+    "preview": "npm run preview --workspace=dashboard",
+    "deploy": "npm run deploy --workspace=dashboard",
+    "cf-typegen": "npm run cf-typegen --workspace=dashboard",
     "start": "npm run start --workspace=dashboard",
     "script": "node packages/script/quick-projects.js",
     "lint": "npm run lint --workspace=dashboard",
     "type-check": "npm run type-check --workspace=dashboard",
     "install:all": "npm install && npm install --workspace=dashboard && npm install --workspace=script",
-    "clean": "rm -rf packages/*/node_modules packages/*/.next packages/*/dist"
+    "clean": "rm -rf packages/*/node_modules packages/*/.next packages/*/dist packages/dashboard/.open-next"
   },
   "keywords": [
     "colosseum",

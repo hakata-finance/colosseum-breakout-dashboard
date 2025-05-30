@@ -12,6 +12,8 @@ out/
 .next/
 .nuxt/
 .output/
+.open-next/
+.wrangler/
 
 # TypeScript
 *.tsbuildinfo

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { Suspense, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { exportToCSV, exportToJSON } from '@/lib/api';
 import { useProjects } from '@/hooks/use-projects';
@@ -19,8 +19,10 @@ import {
   AlertCircle,
   BarChart3,
 } from 'lucide-react';
+import { SkeletonDashboard } from '@/components/ui/skeleton-components';
 
-export default function Dashboard() {
+// Separate component that uses useSearchParams
+function DashboardContent() {
   const { projects, loading, lastFetch, error, fetchData, clearError } = useProjects();
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
 
@@ -134,7 +136,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Click "Fetch Data" to load projects from the Colosseum API.
+                Click &quot;Fetch Data&quot; to load projects from the Colosseum API.
               </p>
               <Button onClick={handleFetchData} disabled={loading}>
                 <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
@@ -177,9 +179,6 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Collapsible Filter Panel */}
-            {/* Filter sidebar is now rendered at the bottom */}
-
             {/* Results Summary - Always reserve space */}
             <div className="h-5">
               {filters.search && (
@@ -212,5 +211,13 @@ export default function Dashboard() {
         />
       </div>
     </div>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <Suspense fallback={<SkeletonDashboard />}>
+      <DashboardContent />
+    </Suspense>
   );
 }

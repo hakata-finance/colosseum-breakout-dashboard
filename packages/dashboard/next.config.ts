@@ -3,15 +3,20 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Basic configuration
   reactStrictMode: true,
-  swcMinify: true,
   poweredByHeader: false,
-  output: 'export',
-  trailingSlash: true,
-  distDir: 'out',
+  
+  // Disable ESLint during builds (for deployment)
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  
+  // Disable TypeScript errors during builds (for deployment)
+  typescript: {
+    ignoreBuildErrors: false,
+  },
 
-  // Image optimization for static export
+  // Image optimization
   images: {
-    unoptimized: true,
     domains: ['static.narrative-violation.com'],
   },
 

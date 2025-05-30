@@ -115,8 +115,8 @@ export function usePerformanceMonitor() {
     fps: 0,
   });
 
-  const frameRef = useRef<number>();
-  const lastTimeRef = useRef<number>();
+  const frameRef = useRef<number | undefined>(undefined);
+  const lastTimeRef = useRef<number | undefined>(undefined);
   const framesRef = useRef<number[]>([]);
 
   const startMeasure = useCallback(() => {

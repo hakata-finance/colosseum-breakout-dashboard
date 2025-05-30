@@ -5,16 +5,31 @@ import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+// Type declaration for gtag
+declare global {
+  interface Window {
+    gtag?: (
+      command: 'event',
+      action: string,
+      parameters?: {
+        description?: string;
+        fatal?: boolean;
+        [key: string]: unknown;
+      }
+    ) => void;
+  }
+}
+
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
-  onError?: (error: Error, errorInfo: any) => void;
+  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
 interface State {
   hasError: boolean;
   error?: Error;
-  errorInfo?: any;
+  errorInfo?: React.ErrorInfo;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
@@ -27,7 +42,7 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: any) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('Dashboard Error:', error, errorInfo);
     this.setState({ errorInfo });
     
@@ -69,7 +84,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">
-                  We're sorry, but something unexpected happened. This error has been logged and we'll look into it.
+                  We&apos;re sorry, but something unexpected happened. This error has been logged and we&apos;ll look into it.
                 </p>
                 {process.env.NODE_ENV === 'development' && this.state.error && (
                   <details className="text-xs bg-muted p-2 rounded">
