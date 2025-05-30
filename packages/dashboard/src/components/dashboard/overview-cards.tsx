@@ -1,9 +1,9 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Project, ProjectMetrics } from "@/types/project";
 import { formatNumber, formatPercentage } from "@/lib/utils";
-import { TrendingUp, Users, MessageSquare, Heart } from "lucide-react";
+import { Users, MessageSquare, Heart, TrendingUp } from "lucide-react";
 
 interface OverviewCardsProps {
   projects: Project[];
@@ -22,48 +22,47 @@ export function OverviewCards({ projects }: OverviewCardsProps) {
 
   const cards = [
     {
-      title: "Total Projects",
+      label: "Projects",
       value: formatNumber(metrics.totalProjects),
       icon: Users,
-      description: "Projects in hackathon",
+      color: "text-blue-600 dark:text-blue-400",
     },
     {
-      title: "Total Likes",
+      label: "Likes",
       value: formatNumber(metrics.totalLikes),
       icon: Heart,
-      description: `Avg: ${metrics.avgLikes.toFixed(1)} per project`,
+      color: "text-red-500 dark:text-red-400",
     },
     {
-      title: "Total Comments",
+      label: "Comments",
       value: formatNumber(metrics.totalComments),
       icon: MessageSquare,
-      description: `Avg: ${metrics.avgComments.toFixed(1)} per project`,
+      color: "text-green-600 dark:text-green-400",
     },
     {
-      title: "Engagement Rate",
+      label: "Engagement",
       value: formatPercentage((metrics.projectsWithLikes / metrics.totalProjects) * 100),
       icon: TrendingUp,
-      description: "Projects with likes",
+      color: "text-purple-600 dark:text-purple-400",
     },
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
       {cards.map((card, index) => {
         const Icon = card.icon;
         return (
-          <Card key={index}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {card.title}
-              </CardTitle>
-              <Icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{card.value}</div>
-              <p className="text-xs text-muted-foreground">
-                {card.description}
-              </p>
+          <Card key={index} className="border-0 bg-muted/30">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                    {card.label}
+                  </p>
+                  <p className="text-lg font-bold mt-1">{card.value}</p>
+                </div>
+                <Icon className={`h-5 w-5 ${card.color}`} />
+              </div>
             </CardContent>
           </Card>
         );

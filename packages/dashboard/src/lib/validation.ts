@@ -252,7 +252,7 @@ export class RateLimiter {
 }
 
 // Global rate limiter instance
-export const apiRateLimiter = new RateLimiter(5, 60000); // 5 calls per minute
+export const apiRateLimiter = new RateLimiter(10, 60000); // 10 calls per minute
 
 /**
  * Security headers for API responses

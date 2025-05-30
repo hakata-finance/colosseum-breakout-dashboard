@@ -23,21 +23,47 @@ export async function fetchProjectsFromAPI(): Promise<Project[]> {
 
 export function exportToCSV(projects: Project[], filename: string = 'colosseum_projects.csv'): void {
   const headers = [
-    'Rank', 'Name', 'Likes', 'Comments', 'Tracks', 'Country', 
-    'Twitter Handle', 'Followers', 'Following', 'Arena URL'
+    'Rank', 'ID', 'Name', 'Slug', 'Description', 'Repository Link', 'Country', 
+    'Presentation Link', 'Technical Demo Link', 'Twitter Handle', 'Twitter Followers', 
+    'Twitter Following', 'Additional Info', 'Owner ID', 'Submitted At', 'Hackathon ID',
+    'Is University Project', 'University Name', 'Team Size', 'Likes', 'Comments',
+    'Tracks', 'Prize', 'Random Order', 'Image URL', 'Image Name', 'Image Size',
+    'Team Members', 'Arena URL', 'Created At', 'Updated At', 'GitHub URL'
   ];
   
   const rows = projects.map((project, index) => [
     index + 1,
+    project.id,
     `"${project.name || ''}"`,
-    project.likes || 0,
-    project.comments || 0,
-    `"${project.tracks ? project.tracks.join(', ') : ''}"`,
+    `"${project.slug || ''}"`,
+    `"${(project.description || '').replace(/"/g, '""')}"`,
+    `"${project.repoLink || ''}"`,
     `"${project.country || ''}"`,
+    `"${project.presentationLink || ''}"`,
+    `"${project.technicalDemoLink || ''}"`,
     `"${project.twitterHandle || ''}"`,
     project.twitterFollowers || 0,
     project.twitterFollowing || 0,
-    `"https://arena.colosseum.org/projects/explore/${project.slug}"`
+    `"${(project.additionalInfo || '').replace(/"/g, '""')}"`,
+    project.ownerId || 0,
+    `"${project.submittedAt || ''}"`,
+    project.hackathonId || 0,
+    project.isUniversityProject ? 'Yes' : 'No',
+    `"${project.universityName || ''}"`,
+    project.teamSize || project.teamMembers?.length || 1,
+    project.likes || 0,
+    project.comments || 0,
+    `"${project.tracks ? project.tracks.join(', ') : ''}"`,
+    `"${project.prize ? JSON.stringify(project.prize).replace(/"/g, '""') : ''}"`,
+    `"${project.randomOrder || ''}"`,
+    `"${project.image?.url || ''}"`,
+    `"${project.image?.name || ''}"`,
+    project.image?.size || 0,
+    `"${project.teamMembers ? project.teamMembers.map(m => `${m.displayName} (${m.username})`).join('; ') : ''}"`,
+    `"https://arena.colosseum.org/projects/explore/${project.slug}"`,
+    `"${project.createdAt || ''}"`,
+    `"${project.updatedAt || ''}"`,
+    `"${project.github_url || ''}"`
   ]);
   
   const csv = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
@@ -69,4 +95,4 @@ export function exportToJSON(projects: Project[], filename: string = 'colosseum_
   a.download = filename;
   a.click();
   window.URL.revokeObjectURL(url);
-} 
+}

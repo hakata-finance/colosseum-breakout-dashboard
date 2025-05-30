@@ -94,39 +94,41 @@ export function SearchInput({
 
   return (
     <div className={cn("relative", className)}>
-      <div className="relative">
-        {isSearching ? (
-          <Loader2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 animate-spin" />
-        ) : (
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-        )}
-        
-        <Input
-          ref={inputRef}
-          type="text"
-          placeholder={placeholder}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          className={cn(
-            "pl-10 pr-10 transition-all duration-200",
-            isFocused && "ring-2 ring-blue-500/20",
-            value && "bg-blue-50/5"
+      <div className="relative flex items-center">
+        <div className="relative flex-1">
+          {isSearching ? (
+            <Loader2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 animate-spin" />
+          ) : (
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           )}
-        />
-        
-        {value && showClearButton && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleClear}
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-muted/50"
-          >
-            <X className="h-3 w-3" />
-          </Button>
-        )}
+          
+          <Input
+            ref={inputRef}
+            type="text"
+            placeholder={placeholder}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            className={cn(
+              "pl-10 pr-10 transition-all duration-200",
+              isFocused && "ring-2 ring-blue-500/20",
+              value && "bg-blue-50/5"
+            )}
+          />
+          
+          {value && showClearButton && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleClear}
+              className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-muted/50"
+            >
+              <X className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Search Suggestions */}
@@ -153,15 +155,6 @@ export function SearchInput({
           </div>
         </div>
       )}
-      
-      {/* Always reserve space for result count */}
-      <div className="h-5 mt-1">
-        {value && resultCount !== undefined && (
-          <div className="text-xs text-muted-foreground">
-            {resultCount} result{resultCount !== 1 ? 's' : ''} found
-          </div>
-        )}
-      </div>
     </div>
   );
 }

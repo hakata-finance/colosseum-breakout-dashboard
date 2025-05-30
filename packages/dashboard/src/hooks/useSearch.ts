@@ -307,6 +307,6 @@ export function useSearch(projects: Project[]) {
     resultCount: filteredProjects.length,
     updateFilters,
     clearFilters,
-    hasActiveFilters: filters.search || filters.tracks.length > 0 || filters.countries.length > 0
+    hasActiveFilters: Boolean(filters.search || filters.tracks.length > 0 || filters.countries.length > 0)
   };
 }

@@ -13,6 +13,8 @@ interface ProjectsContextType {
   error: string | null;
   fetchData: () => Promise<void>;
   clearError: () => void;
+  isRefreshing: boolean;
+  refreshCount: number;
 }
 
 const ProjectsContext = createContext<ProjectsContextType | null>(null);
@@ -25,10 +27,13 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
   const [lastFetch, setLastFetch] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [refreshCount, setRefreshCount] = useState(0);
 
   const fetchData = async (isBackground = false) => {
     if (!isBackground) {
       setLoading(true);
+      setIsRefreshing(true);
     }
     setError(null);
     
@@ -43,6 +48,7 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
       setProjects(validatedProjects);
       saveProjects(validatedProjects);
       setLastFetch(new Date());
+      setRefreshCount(prev => prev + 1);
       
       console.log(`Successfully loaded ${validatedProjects.length} projects`);
     } catch (error) {
@@ -51,6 +57,7 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
     } finally {
       if (!isBackground) {
         setLoading(false);
+        setIsRefreshing(false);
       }
     }
   };
@@ -124,7 +131,9 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
       lastFetch,
       error,
       fetchData: () => fetchData(false),
-      clearError
+      clearError,
+      isRefreshing,
+      refreshCount
     }}>
       {children}
     </ProjectsContext.Provider>
