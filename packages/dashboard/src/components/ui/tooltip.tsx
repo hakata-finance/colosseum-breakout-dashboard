@@ -24,13 +24,13 @@ export function Tooltip({
   const [shouldShow, setShouldShow] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const timeoutRef = useRef<number | undefined>(undefined);
 
   const handleMouseEnter = () => {
     if (!content.trim()) return;
     
     setShouldShow(true);
-    timeoutRef.current = setTimeout(() => {
+    timeoutRef.current = window.setTimeout(() => {
       if (shouldShow) {
         setIsVisible(true);
       }
@@ -40,7 +40,7 @@ export function Tooltip({
   const handleMouseLeave = () => {
     setShouldShow(false);
     if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+      window.clearTimeout(timeoutRef.current);
     }
     setIsVisible(false);
   };
@@ -48,7 +48,7 @@ export function Tooltip({
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+        window.clearTimeout(timeoutRef.current);
       }
     };
   }, []);

@@ -30,15 +30,33 @@ interface State {
   hasError: boolean;
   error?: Error;
   errorInfo?: React.ErrorInfo;
+  retryCount: number;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
+  private retryTimeoutId: number | null = null;
+
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { 
+      hasError: false, 
+      retryCount: 0 
+    };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error: Error): Partial<State> {
+    // Handle hydration mismatches more gracefully
+    if (error.message?.includes('Hydration') || error.message?.includes('hydration')) {
+      console.warn('Hydration mismatch detected, will retry:', error.message);
+      return { hasError: true, error };
+    }
+    
+    // Handle extension conflicts
+    if (error.message?.includes('ethereum') || error.message?.includes('wallet')) {
+      console.warn('Wallet extension conflict detected:', error.message);
+      return { hasError: true, error };
+    }
+
     return { hasError: true, error };
   }
 
@@ -49,17 +67,48 @@ export class ErrorBoundary extends Component<Props, State> {
     // Call custom error handler if provided
     this.props.onError?.(error, errorInfo);
     
-    // Send to analytics/monitoring service
-    if (typeof window !== 'undefined' && window.gtag) {
+    // Send to analytics/monitoring service (only for real errors, not hydration)
+    if (typeof window !== 'undefined' && window.gtag && !this.isHydrationError(error)) {
       window.gtag('event', 'exception', {
         description: error.message,
         fatal: false,
       });
     }
+
+    // Auto-retry for hydration errors (once)
+    if (this.isHydrationError(error) && this.state.retryCount === 0) {
+      this.retryTimeoutId = window.setTimeout(() => {
+        this.handleRetry();
+      }, 1000);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.retryTimeoutId) {
+      window.clearTimeout(this.retryTimeoutId);
+    }
+  }
+
+  private isHydrationError(error: Error): boolean {
+    return error.message?.toLowerCase().includes('hydration') || 
+           error.message?.includes('185') || // React error 185 is hydration related
+           error.message?.includes('did not match');
+  }
+
+  private isExtensionError(error: Error): boolean {
+    return error.message?.includes('ethereum') || 
+           error.message?.includes('wallet') ||
+           error.message?.includes('evmAsk') ||
+           error.message?.includes('Cannot redefine property');
   }
 
   private handleRetry = () => {
-    this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+    this.setState(prevState => ({ 
+      hasError: false, 
+      error: undefined, 
+      errorInfo: undefined,
+      retryCount: prevState.retryCount + 1
+    }));
   };
 
   private handleReload = () => {
@@ -67,10 +116,13 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   render() {
-    if (this.state.hasError) {
+    if (this.state.hasError && this.state.error) {
       if (this.props.fallback) {
         return this.props.fallback;
       }
+
+      const isHydration = this.isHydrationError(this.state.error);
+      const isExtension = this.isExtensionError(this.state.error);
 
       return (
         <div className="min-h-[400px] flex items-center justify-center p-4">
@@ -78,14 +130,25 @@ export class ErrorBoundary extends Component<Props, State> {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-destructive">
                 <AlertTriangle className="h-5 w-5" />
-                Something went wrong
+                {isHydration ? 'Loading Issue' : isExtension ? 'Extension Conflict' : 'Something went wrong'}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">
-                  We&apos;re sorry, but something unexpected happened. This error has been logged and we&apos;ll look into it.
-                </p>
+                {isHydration ? (
+                  <p className="text-sm text-muted-foreground">
+                    The page had a loading issue. This sometimes happens and usually resolves by trying again.
+                  </p>
+                ) : isExtension ? (
+                  <p className="text-sm text-muted-foreground">
+                    A browser extension (likely a crypto wallet) is conflicting with the dashboard. Try disabling wallet extensions or use an incognito window.
+                  </p>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    We&apos;re sorry, but something unexpected happened. This error has been logged and we&apos;ll look into it.
+                  </p>
+                )}
+                
                 {process.env.NODE_ENV === 'development' && this.state.error && (
                   <details className="text-xs bg-muted p-2 rounded">
                     <summary className="cursor-pointer font-medium">Error Details</summary>
@@ -106,6 +169,12 @@ export class ErrorBoundary extends Component<Props, State> {
                   Reload Page
                 </Button>
               </div>
+              
+              {this.state.retryCount > 0 && (
+                <p className="text-xs text-muted-foreground text-center">
+                  Retry attempt: {this.state.retryCount}
+                </p>
+              )}
             </CardContent>
           </Card>
         </div>

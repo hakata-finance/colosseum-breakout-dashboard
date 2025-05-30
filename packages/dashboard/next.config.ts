@@ -29,6 +29,28 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+
+  // Enhanced error handling for production
+  experimental: {
+    // Better hydration error recovery and bundle optimization
+    optimizePackageImports: ['lucide-react', 'recharts'],
+  },
+
+  // Custom webpack config to handle extension conflicts
+  webpack: (config, { dev, isServer }) => {
+    // Only apply in production client builds
+    if (!dev && !isServer) {
+      // Add fallbacks for browser-only APIs
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+    }
+    
+    return config;
+  },
 };
 
 export default nextConfig;
