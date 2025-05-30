@@ -120,7 +120,7 @@ export function ProjectsTable({
           key="search-input" // Stable key to prevent re-mounting
           value={searchValue || ''} // Ensure value is never undefined
           onChange={onSearchChange}
-          placeholder="Search projects..."
+          placeholder="Search projects and descriptions..."
           isSearching={isSearching}
           className="w-full"
         />
