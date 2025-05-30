@@ -17,35 +17,19 @@ interface ProjectsContextType {
 
 const ProjectsContext = createContext<ProjectsContextType | null>(null);
 
+const STALE_TIME = 60 * 1000; // 1 minute - auto-refresh if data is older
+
 export function ProjectsProvider({ children }: { children: ReactNode }) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
   const [lastFetch, setLastFetch] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [initialLoaded, setInitialLoaded] = useState(false);
 
-  // Load data on mount
-  useEffect(() => {
-    const loadInitialData = async () => {
-      try {
-        const savedProjects = loadProjects();
-        const lastFetchTime = getLastFetchTime();
-        
-        if (savedProjects.length > 0) {
-          const validatedProjects = validateProjects(savedProjects);
-          setProjects(validatedProjects);
-          setLastFetch(lastFetchTime);
-        }
-      } catch (error) {
-        console.error('Failed to load initial data:', error);
-        setError('Failed to load saved data');
-      }
-    };
-
-    loadInitialData();
-  }, []);
-
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (isBackground = false) => {
+    if (!isBackground) {
+      setLoading(true);
+    }
     setError(null);
     
     try {
@@ -65,9 +49,71 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
       console.error('Failed to fetch projects:', error);
       setError(error instanceof Error ? error.message : 'Failed to fetch projects');
     } finally {
-      setLoading(false);
+      if (!isBackground) {
+        setLoading(false);
+      }
     }
   };
+
+  // Load data on mount with auto-fetch logic
+  useEffect(() => {
+    const loadInitialData = async () => {
+      try {
+        const savedProjects = loadProjects();
+        const lastFetchTime = getLastFetchTime();
+        
+        // Check if we have saved data and it's not too old
+        const hasValidSavedData = savedProjects.length > 0 && lastFetchTime;
+        const dataAge = lastFetchTime ? Date.now() - lastFetchTime.getTime() : Infinity;
+        const isStale = dataAge > STALE_TIME;
+        
+        if (hasValidSavedData) {
+          // Load saved data immediately
+          const validatedProjects = validateProjects(savedProjects);
+          setProjects(validatedProjects);
+          setLastFetch(lastFetchTime);
+          console.log(`Loaded ${validatedProjects.length} cached projects (${Math.floor(dataAge / 1000)}s old)`);
+          
+          // If data is stale, refresh in background
+          if (isStale) {
+            console.log('Data is stale, refreshing in background...');
+            fetchData(true); // Background refresh
+          }
+        } else {
+          // No saved data or invalid data - fetch fresh
+          console.log('No cached data found, fetching fresh...');
+          await fetchData();
+        }
+      } catch (error) {
+        console.error('Failed to load initial data:', error);
+        setError('Failed to load saved data');
+        // Try to fetch fresh data as fallback
+        await fetchData();
+      } finally {
+        setInitialLoaded(true);
+      }
+    };
+
+    loadInitialData();
+  }, []);
+
+  // Set up periodic refresh when data gets stale
+  useEffect(() => {
+    if (!lastFetch || !initialLoaded) return;
+    
+    const checkForRefresh = () => {
+      const dataAge = Date.now() - lastFetch.getTime();
+      if (dataAge > STALE_TIME) {
+        console.log('Data became stale, refreshing in background...');
+        fetchData(true);
+      }
+    };
+    
+    // Check every 30 seconds if we need to refresh
+    const interval = setInterval(checkForRefresh, 30000);
+    
+    return () => clearInterval(interval);
+  }, [lastFetch, initialLoaded]);
 
   const clearError = () => setError(null);
 
@@ -77,7 +123,7 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
       loading,
       lastFetch,
       error,
-      fetchData,
+      fetchData: () => fetchData(false),
       clearError
     }}>
       {children}
