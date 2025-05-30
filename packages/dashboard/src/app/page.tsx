@@ -142,7 +142,7 @@ function CompactHeader({
 
 // Separate component that uses useSearchParams
 function DashboardContent() {
-  const { projects, loading, lastFetch, error, clearError } = useProjects();
+  const { projects, lastFetch, error, clearError } = useProjects();
   const [showFilterSidebar, setShowFilterSidebar] = useState(false);
   const { success, error: showError, toasts, removeToast } = useToast();
 
@@ -157,7 +157,6 @@ function DashboardContent() {
     filters,
     filteredProjects,
     isSearching,
-    resultCount,
     updateFilters,
     clearFilters,
     hasActiveFilters

@@ -99,7 +99,9 @@ export class ErrorBoundary extends Component<Props, State> {
     return error.message?.includes('ethereum') || 
            error.message?.includes('wallet') ||
            error.message?.includes('evmAsk') ||
-           error.message?.includes('Cannot redefine property');
+           error.message?.includes('Cannot redefine property') ||
+           error.message?.includes('Phantom') ||
+           error.message?.includes('Rabby');
   }
 
   private handleRetry = () => {
@@ -130,7 +132,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-destructive">
                 <AlertTriangle className="h-5 w-5" />
-                {isHydration ? 'Loading Issue' : isExtension ? 'Extension Conflict' : 'Something went wrong'}
+                {isHydration ? 'Loading Issue' : isExtension ? 'Wallet Extension Conflict' : 'Something went wrong'}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -140,9 +142,19 @@ export class ErrorBoundary extends Component<Props, State> {
                     The page had a loading issue. This sometimes happens and usually resolves by trying again.
                   </p>
                 ) : isExtension ? (
-                  <p className="text-sm text-muted-foreground">
-                    A browser extension (likely a crypto wallet) is conflicting with the dashboard. Try disabling wallet extensions or use an incognito window.
-                  </p>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">
+                      Multiple wallet extensions (Phantom, Rabby, etc.) are conflicting with each other.
+                    </p>
+                    <div className="text-xs bg-muted p-2 rounded space-y-1">
+                      <p className="font-medium">Quick fixes:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Disable one wallet extension temporarily</li>
+                        <li>Use an incognito/private window</li>
+                        <li>Refresh the page (conflict protection is now active)</li>
+                      </ul>
+                    </div>
+                  </div>
                 ) : (
                   <p className="text-sm text-muted-foreground">
                     We&apos;re sorry, but something unexpected happened. This error has been logged and we&apos;ll look into it.

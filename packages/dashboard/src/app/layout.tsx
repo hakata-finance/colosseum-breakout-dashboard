@@ -85,6 +85,42 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        {/* Wallet Extension Conflict Protection */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Prevent wallet extension conflicts
+              (function() {
+                const originalDefineProperty = Object.defineProperty;
+                const protectedProperties = new Set(['ethereum', 'solana', 'phantom']);
+                
+                Object.defineProperty = function(obj, prop, descriptor) {
+                  // Allow first wallet to define the property, ignore subsequent attempts
+                  if (obj === window && protectedProperties.has(prop)) {
+                    if (window[prop]) {
+                      console.warn('Wallet conflict prevented: ' + prop + ' already defined');
+                      return obj;
+                    }
+                  }
+                  return originalDefineProperty.call(this, obj, prop, descriptor);
+                };
+                
+                // Suppress wallet-related console errors
+                const originalError = console.error;
+                console.error = function(...args) {
+                  const message = args.join(' ');
+                  if (message.includes('ethereum') || 
+                      message.includes('evmAsk') || 
+                      message.includes('Cannot redefine property')) {
+                    return; // Suppress wallet conflicts
+                  }
+                  return originalError.apply(console, args);
+                };
+              })();
+            `
+          }}
+        />
+        
         {/* Cloudflare Web Analytics */}
         <script 
           defer 
