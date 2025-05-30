@@ -1,0 +1,42 @@
+{
+  "name": "colosseum-breakout-dashboard",
+  "version": "1.0.0",
+  "description": "Analytics dashboard for exploring Colosseum hackathon projects",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=dashboard",
+    "build": "npm run build --workspace=dashboard",
+    "start": "npm run start --workspace=dashboard",
+    "script": "node packages/script/quick-projects.js",
+    "lint": "npm run lint --workspace=dashboard",
+    "type-check": "npm run type-check --workspace=dashboard",
+    "install:all": "npm install && npm install --workspace=dashboard && npm install --workspace=script",
+    "clean": "rm -rf packages/*/node_modules packages/*/.next packages/*/dist"
+  },
+  "keywords": [
+    "colosseum",
+    "hackathon",
+    "dashboard",
+    "analytics",
+    "nextjs",
+    "react",
+    "typescript"
+  ],
+  "author": "Colosseum Dashboard Contributors",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/colosseum-breakout-dashboard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/colosseum-breakout-dashboard/issues"
+  },
+  "homepage": "https://github.com/yourusername/colosseum-breakout-dashboard#readme"
+}

@@ -19,10 +19,8 @@ out/
 
 # Environment variables
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
 
 # IDE and editors
 .idea/
@@ -48,11 +46,10 @@ logs/
 tmp/
 temp/
 
-data
-
-# Database files
-*.db
-*.db-wal
-*.db-shm
-projects_tracking.db*
-session.json
+# Script package sensitive data
+packages/script/.env
+packages/script/.env.*
+!packages/script/env.example
+packages/script/projects_tracking.db*
+packages/script/data/
+packages/script/session.json
