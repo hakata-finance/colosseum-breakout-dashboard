@@ -11,7 +11,8 @@
     "test": "echo \"Warning: no tests specified\" && exit 0",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "deploy-cf": "npm ci --platform=linux --arch=x64 --include=optional && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "deploy-cf": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "deploy-cf-old": "npm ci --platform=linux --arch=x64 --include=optional && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
@@ -50,5 +51,8 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
+  },
+  "optionalDependencies": {
+    "@ast-grep/napi-linux-x64-gnu": "^0.38.3"
   }
 }
