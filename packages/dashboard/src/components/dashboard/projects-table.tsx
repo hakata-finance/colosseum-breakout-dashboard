@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Pagination } from "@/components/ui/pagination";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Project, FilterOptions } from "@/types/project";
 import { formatNumber, truncate } from "@/lib/utils";
 import { ExternalLink, Heart, MessageSquare, Users, MapPin, ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
@@ -14,24 +15,32 @@ interface ProjectsTableProps {
   filters: FilterOptions;
   onFiltersChange: (filters: Partial<FilterOptions>) => void;
   onProjectClick?: (project: Project) => void;
-  BookmarkButton?: React.ComponentType<any>;
+  BookmarkButton?: React.ComponentType<{ projectId: number; size: string; variant: string }>;
 }
 
-const ITEMS_PER_PAGE = 50;
+const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
+const DEFAULT_PAGE_SIZE = 20;
 
 export function ProjectsTable({ projects, filters, onFiltersChange, onProjectClick, BookmarkButton }: ProjectsTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_PAGE_SIZE);
 
-  const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(projects.length / itemsPerPage);
   
   const paginatedProjects = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return projects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [projects, currentPage]);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return projects.slice(startIndex, startIndex + itemsPerPage);
+  }, [projects, currentPage, itemsPerPage]);
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
     document.getElementById('projects-table')?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
+  const handlePageSizeChange = useCallback((newSize: string) => {
+    const size = parseInt(newSize);
+    setItemsPerPage(size);
+    setCurrentPage(1); // Reset to first page when changing page size
   }, []);
 
   const handleSort = useCallback((column: FilterOptions['sortBy']) => {
@@ -81,10 +90,28 @@ export function ProjectsTable({ projects, filters, onFiltersChange, onProjectCli
   return (
     <Card id="projects-table">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Users className="h-5 w-5" />
-          Projects ({formatNumber(projects.length)})
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Projects ({formatNumber(projects.length)})
+          </CardTitle>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Show:</span>
+            <Select value={itemsPerPage.toString()} onValueChange={handlePageSizeChange}>
+              <SelectTrigger className="w-20">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PAGE_SIZE_OPTIONS.map(size => (
+                  <SelectItem key={size} value={size.toString()}>
+                    {size}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <span className="text-sm text-muted-foreground">per page</span>
+          </div>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="rounded-md border overflow-x-auto">
@@ -153,7 +180,7 @@ export function ProjectsTable({ projects, filters, onFiltersChange, onProjectCli
             </TableHeader>
             <TableBody>
               {paginatedProjects.map((project, index) => {
-                const globalIndex = (currentPage - 1) * ITEMS_PER_PAGE + index + 1;
+                const globalIndex = (currentPage - 1) * itemsPerPage + index + 1;
                 const teamSize = project.teamMembers?.length || 1;
                 
                 return (
@@ -260,7 +287,7 @@ export function ProjectsTable({ projects, filters, onFiltersChange, onProjectCli
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
-            itemsPerPage={ITEMS_PER_PAGE}
+            itemsPerPage={itemsPerPage}
             totalItems={projects.length}
           />
         )}
