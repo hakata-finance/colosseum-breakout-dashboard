@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspace=dashboard",
-    "build": "npm run build --workspace=dashboard",
+    "build": "npm install --workspace=dashboard && npm run build --workspace=dashboard",
     "start": "npm run start --workspace=dashboard",
     "script": "node packages/script/quick-projects.js",
     "lint": "npm run lint --workspace=dashboard",

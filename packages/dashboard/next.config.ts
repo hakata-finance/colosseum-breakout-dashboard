@@ -5,9 +5,13 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   poweredByHeader: false,
+  output: 'export',
+  trailingSlash: true,
+  distDir: 'out',
 
-  // Image optimization
+  // Image optimization for static export
   images: {
+    unoptimized: true,
     domains: ['static.narrative-violation.com'],
   },
 
