@@ -84,6 +84,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        {/* Cloudflare Web Analytics */}
+        <script 
+          defer 
+          src="https://static.cloudflareinsights.com/beacon.min.js" 
+          data-cf-beacon='{"token": "9e1ce4e6156048cb82a72c94fa901c3a"}'
+        />
+      </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <ProjectsProvider>
           <div className="relative flex min-h-screen flex-col bg-background">
