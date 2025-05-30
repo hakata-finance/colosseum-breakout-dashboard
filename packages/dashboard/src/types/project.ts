@@ -69,6 +69,6 @@ export interface FilterOptions {
   countries: string[];
   teamSizeRange: [number, number];
   likesRange: [number, number];
-  sortBy: 'likes' | 'comments' | 'name' | 'country';
+  sortBy: 'likes' | 'comments' | 'name' | 'country' | 'teamSize';
   sortOrder: 'asc' | 'desc';
 } 

@@ -185,6 +185,10 @@ export function useSearch(projects: Project[]) {
             aValue = a.project.country || '';
             bValue = b.project.country || '';
             break;
+          case 'teamSize':
+            aValue = a.teamSize;
+            bValue = b.teamSize;
+            break;
           default:
             aValue = a.project.likes || 0;
             bValue = b.project.likes || 0;

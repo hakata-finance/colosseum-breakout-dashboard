@@ -17,7 +17,12 @@ const nextConfig: NextConfig = {
 
   // Image optimization
   images: {
-    domains: ['static.narrative-violation.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'static.narrative-violation.com',
+      },
+    ],
   },
 
   // Remove console logs in production
