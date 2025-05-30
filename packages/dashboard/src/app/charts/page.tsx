@@ -66,12 +66,6 @@ function ChartsContent() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button onClick={handleFetchData} disabled={loading}>
-              <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-              {loading ? 'Refreshing...' : 'Refresh Data'}
-            </Button>
-          </div>
         </div>
 
         {/* Error Display */}
