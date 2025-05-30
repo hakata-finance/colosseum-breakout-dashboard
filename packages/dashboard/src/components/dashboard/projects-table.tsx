@@ -280,21 +280,20 @@ export function ProjectsTable({
             </Tooltip>
           </TableCell>
           <TableCell className="py-2">
-            <div className="flex flex-wrap gap-1 justify-center">
+            <div className="text-xs text-center leading-relaxed max-w-[120px]">
               {project.tracks?.length > 0 ? (
-                project.tracks.slice(0, 2).map((track, i) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center px-1.5 py-0.5 rounded text-xs bg-hakata-purple/10 text-hakata-purple dark:bg-hakata-purple/20 dark:text-hakata-light-purple border border-hakata-purple/20 dark:border-hakata-purple/30"
-                  >
-                    {track}
-                  </span>
-                ))
+                <div className="space-y-0.5">
+                  {project.tracks.map((track, i) => (
+                    <div
+                      key={i}
+                      className="text-hakata-purple dark:text-hakata-light-purple font-medium"
+                    >
+                      {track}
+                    </div>
+                  ))}
+                </div>
               ) : (
-                <span className="text-muted-foreground text-xs">—</span>
-              )}
-              {project.tracks?.length > 2 && (
-                <span className="text-xs text-muted-foreground">+{project.tracks.length - 2}</span>
+                <span className="text-muted-foreground">—</span>
               )}
             </div>
           </TableCell>

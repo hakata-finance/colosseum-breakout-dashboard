@@ -24,7 +24,7 @@ export function Tooltip({
   const [shouldShow, setShouldShow] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const handleMouseEnter = () => {
     if (!content.trim()) return;

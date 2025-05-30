@@ -76,7 +76,7 @@ function CompactHeader({
             <div className="hidden lg:flex items-center gap-2 ml-4 pl-4 border-l text-xs text-muted-foreground">
               <span>made with ❤️ by</span>
               <Link
-                href="https://hakata.fi"
+                href="https://arena.colosseum.org/projects/explore/hakata-finance"
                 target="_blank"
                 className="flex items-center gap-1 hover:text-foreground transition-colors"
               >
