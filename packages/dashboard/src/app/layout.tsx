@@ -84,17 +84,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        {/* Safe analytics initialization */}
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            window.plausible = window.plausible || function() { 
-              (window.plausible.q = window.plausible.q || []).push(arguments) 
-            };
-          `
-        }} />
-        <script defer data-domain="dashboard-breakout.hakata.fi" src="https://plausible.io/js/script.file-downloads.outbound-links.pageview-props.tagged-events.js"></script>
-      </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <ProjectsProvider>
           <div className="relative flex min-h-screen flex-col bg-background">
