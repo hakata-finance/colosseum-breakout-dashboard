@@ -33,10 +33,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/colosseum-breakout-dashboard.git"
+    "url": "git+https://github.com/hakata-finance/colosseum-breakout-dashboard.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/colosseum-breakout-dashboard/issues"
+    "url": "https://github.com/hakata-finance/colosseum-breakout-dashboard/issues"
   },
-  "homepage": "https://github.com/yourusername/colosseum-breakout-dashboard#readme"
+  "homepage": "https://github.com/hakata-finance/colosseum-breakout-dashboard#readme"
 }
