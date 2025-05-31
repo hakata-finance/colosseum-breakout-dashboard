@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import { ProjectsProvider } from "@/hooks/use-projects";
 import "./globals.css";
 
@@ -121,11 +122,19 @@ export default function RootLayout({
           }}
         />
         
-        {/* Cloudflare Web Analytics */}
-        <script 
+        <Script 
           defer 
           src="https://static.cloudflareinsights.com/beacon.min.js" 
           data-cf-beacon='{"token": "9e1ce4e6156048cb82a72c94fa901c3a"}'
+        />
+        
+        <Script strategy="afterInteractive" id="plausible-init">
+          {`window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }`}
+        </Script>
+        <Script 
+          strategy="afterInteractive"
+          data-domain="dashboard-breakout.hakata.fi"
+          src="https://edge.hakata.fi/js/script.file-downloads.outbound-links.pageview-props.tagged-events.js"
         />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
