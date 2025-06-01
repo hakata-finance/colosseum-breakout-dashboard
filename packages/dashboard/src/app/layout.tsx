@@ -122,11 +122,11 @@ export default function RootLayout({
           }}
         />
         
-        <Script 
+        {/* <Script 
           defer 
           src="https://static.cloudflareinsights.com/beacon.min.js" 
           data-cf-beacon='{"token": "9e1ce4e6156048cb82a72c94fa901c3a"}'
-        />
+        /> */}
         
         <Script strategy="afterInteractive" id="plausible-init">
           {`window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }`}
