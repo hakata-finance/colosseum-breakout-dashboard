@@ -3,6 +3,15 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
+// Add shimmer effect
+export function SkeletonShimmer() {
+  return (
+    <div className="animate-pulse">
+      <div className="h-4 bg-gradient-to-r from-muted via-muted/50 to-muted rounded animate-shimmer" />
+    </div>
+  );
+}
+
 export function SkeletonOverviewCards() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

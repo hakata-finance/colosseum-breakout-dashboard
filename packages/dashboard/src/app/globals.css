@@ -64,6 +64,26 @@
     --input: 217 32.6% 17.5%;
     --ring: 240 4.9% 83.9%;
   }
+
+  .text-display {
+    @apply text-4xl font-bold tracking-tight;
+  }
+  
+  .text-heading {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+  
+  .text-subheading {
+    @apply text-lg font-medium;
+  }
+  
+  .text-body {
+    @apply text-sm leading-relaxed;
+  }
+  
+  .text-caption {
+    @apply text-xs text-muted-foreground;
+  }
 }
 
 @layer base {
