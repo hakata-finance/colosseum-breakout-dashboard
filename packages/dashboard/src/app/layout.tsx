@@ -27,16 +27,16 @@ export const metadata: Metadata = {
   authors: [
     {
       name: "Hakata Finance Team",
-      url: "https://hakata.finance"
+      url: "https://hakata.fi"
     }
   ],
   creator: "Hakata Finance",
   publisher: "Hakata Finance",
-  metadataBase: new URL('https://colosseum-dashboard.hakata.finance'),
+  metadataBase: new URL('https://dashboard-breakout.hakata.fi'),
   openGraph: {
     title: "Colosseum Projects Dashboard | Hakata Finance",
     description: "Advanced analytics dashboard for exploring Colosseum hackathon projects. Built by Hakata Finance.",
-    url: "https://colosseum-dashboard.hakata.finance",
+    url: "https://dashboard-breakout.hakata.fi",
     siteName: "Hakata Finance",
     images: [
       {
