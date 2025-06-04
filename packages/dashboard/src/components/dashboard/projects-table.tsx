@@ -127,8 +127,8 @@ export function ProjectsTable({
   const [expandedDescriptions, setExpandedDescriptions] = useState<Set<number>>(new Set());
   const [teamPopover, setTeamPopover] = useState<number | null>(null);
 
-  // Add ref for click outside detection
-  const popoverRef = useRef<HTMLDivElement>(null);
+  // Change the ref type to match TableCell
+  const popoverRef = useRef<HTMLTableCellElement>(null);
 
   // Close popover on click outside
   useEffect(() => {
