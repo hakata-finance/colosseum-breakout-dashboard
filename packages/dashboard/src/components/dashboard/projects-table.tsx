@@ -29,15 +29,13 @@ interface ProjectsTableProps {
   onClearFilters: () => void;
 }
 
-const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
-const DEFAULT_PAGE_SIZE = 10;
+const PAGE_SIZE_OPTIONS = [10, 20, 50, 100, 250];
+const DEFAULT_PAGE_SIZE = 20;
 
 export function ProjectsTable({ 
   projects, 
   filters, 
   onFiltersChange, 
-  onProjectClick, 
-  BookmarkButton,
   searchValue,
   onSearchChange,
   isSearching = false,
