@@ -76,23 +76,3 @@ export function exportToCSV(projects: Project[], filename: string = 'colosseum_p
   a.click();
   window.URL.revokeObjectURL(url);
 }
-
-export function exportToJSON(projects: Project[], filename: string = 'colosseum_projects.json'): void {
-  const exportData = {
-    exported_at: new Date().toISOString(),
-    total_projects: projects.length,
-    projects: projects.map((project, index) => ({
-      rank: index + 1,
-      ...project,
-      arena_url: `https://arena.colosseum.org/projects/explore/${project.slug}`
-    }))
-  };
-  
-  const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  window.URL.revokeObjectURL(url);
-}
