@@ -127,8 +127,8 @@ export function ProjectsTable({
   const [expandedDescriptions, setExpandedDescriptions] = useState<Set<number>>(new Set());
   const [teamPopover, setTeamPopover] = useState<number | null>(null);
 
-  // Change the ref type to match TableCell
-  const popoverRef = useRef<HTMLTableCellElement>(null);
+  // Change the ref type to match the popover div
+  const popoverRef = useRef<HTMLDivElement>(null);
 
   // Close popover on click outside
   useEffect(() => {
@@ -434,7 +434,7 @@ export function ProjectsTable({
               </span>
             </div>
           </TableCell>
-          <TableCell className="text-center py-4 relative" ref={popoverRef}>
+          <TableCell className="text-center py-4 relative">
             <div 
               className="flex items-center justify-center gap-1 cursor-pointer hover:bg-gray-800/30 rounded px-3 py-1 transition-colors min-w-[50px]"
               onClick={() => setTeamPopover(teamPopover === project.id ? null : project.id)}
@@ -446,6 +446,7 @@ export function ProjectsTable({
             {/* Enhanced Team Details Popover with Smart Positioning */}
             {teamPopover === project.id && (
               <div 
+                ref={popoverRef}
                 className={`absolute left-1/2 transform -translate-x-1/2 z-50 bg-gray-900 border border-gray-700 rounded-md shadow-lg p-3 min-w-[220px] ${
                   // Show above if it's one of the last few rows
                   index >= paginatedProjects.length - 3 
