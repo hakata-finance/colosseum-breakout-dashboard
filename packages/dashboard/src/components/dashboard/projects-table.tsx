@@ -48,7 +48,7 @@ export function ProjectsTable({
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   // Ensure projects is always an array to prevent crashes
-  const safeProjects = Array.isArray(projects) ? projects : [];
+  const safeProjects = useMemo(() => Array.isArray(projects) ? projects : [], [projects]);
   const projectCount = safeProjects.length;
   const totalPages = Math.max(1, Math.ceil(projectCount / itemsPerPage));
   

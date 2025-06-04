@@ -20,6 +20,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { SkeletonDashboard } from '@/components/ui/skeleton-components';
+import { Project } from '@/types/project';
 
 // Compact Header with Action Buttons
 function CompactHeader({ 
@@ -28,13 +29,13 @@ function CompactHeader({
   onExportCSV, 
   filteredProjects 
 }: {
-  projects: any[];
+  projects: Project[];
   lastFetch: Date | null;
   onExportCSV: () => void;
-  filteredProjects: any[];
+  filteredProjects: Project[];
 }) {
   return (
-    <div className="border-b bg-muted/20">
+    <div className="border-b bg-gray-900/50 backdrop-blur-sm">
       <div className="container mx-auto px-6 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
