@@ -2,8 +2,8 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Project, ProjectMetrics } from "@/types/project";
-import { formatNumber, formatPercentage } from "@/lib/utils";
-import { Users, MessageSquare, Heart, TrendingUp } from "lucide-react";
+import { formatNumber } from "@/lib/utils";
+import { Users, MessageSquare, Heart } from "lucide-react";
 
 interface OverviewCardsProps {
   projects: Project[];
@@ -39,16 +39,10 @@ export function OverviewCards({ projects }: OverviewCardsProps) {
       icon: MessageSquare,
       color: "text-green-600 dark:text-green-400",
     },
-    {
-      label: "Engagement",
-      value: formatPercentage((metrics.projectsWithLikes / metrics.totalProjects) * 100),
-      icon: TrendingUp,
-      color: "text-purple-600 dark:text-purple-400",
-    },
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div className="grid grid-cols-3 gap-3">
       {cards.map((card, index) => {
         const Icon = card.icon;
         return (
