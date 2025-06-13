@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import { ProjectsProvider } from "@/hooks/use-projects";
+import { HeaderNotification } from "@/components/header-notification-component";
 import "./globals.css";
 
 const inter = Inter({ 
@@ -134,6 +135,7 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         <ProjectsProvider>
           <div className="relative flex min-h-screen flex-col bg-background">
+            <HeaderNotification />
             <main className="flex-1">
               {children}
             </main>
